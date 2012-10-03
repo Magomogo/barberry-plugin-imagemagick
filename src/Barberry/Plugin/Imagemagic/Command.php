@@ -1,8 +1,10 @@
 <?php
 namespace Barberry\Plugin\Imagemagic;
+
 use Barberry\Plugin\InterfaceCommand;
 
-class Command implements InterfaceCommand {
+class Command implements InterfaceCommand
+{
 
     const MAX_WIDTH = 800;
     const MAX_HEIGHT = 600;
@@ -14,10 +16,11 @@ class Command implements InterfaceCommand {
      * @param string $commandString
      * @return Command
      */
-    public function configure($commandString) {
-        $params = explode("_",$commandString);
-            foreach ($params as $val) {
-            if (preg_match("@^([\d]*)x([\d]*)$@",$val,$regs)) {
+    public function configure($commandString)
+    {
+        $params = explode("_", $commandString);
+        foreach ($params as $val) {
+            if (preg_match("@^([\d]*)x([\d]*)$@", $val, $regs)) {
                 $this->width = strlen($regs[1]) ? min((int)$regs[1], self::MAX_WIDTH) : null;
                 $this->height = strlen($regs[2]) ? min((int)$regs[2], self::MAX_HEIGHT) : null;
             }
@@ -25,19 +28,23 @@ class Command implements InterfaceCommand {
         return $this;
     }
 
-    public function conforms($commandString) {
-        return true;
+    public function conforms($commandString)
+    {
+        return strval($this) === $commandString;
     }
 
-    public function width() {
+    public function width()
+    {
         return $this->width;
     }
 
-    public function height() {
+    public function height()
+    {
         return $this->height;
     }
 
-    public function __toString() {
-        return strval($this->width.'x'.$this->height);
+    public function __toString()
+    {
+        return strval($this->width . 'x' . $this->height);
     }
 }
