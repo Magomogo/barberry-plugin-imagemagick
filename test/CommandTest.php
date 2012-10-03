@@ -35,6 +35,7 @@ class CommandTest extends \PHPUnit_Framework_TestCase
     public function testAmbiguityTest()
     {
         $this->assertFalse(self::command('200sda2x100')->conforms('200x100'));
+        $this->assertTrue(self::command('')->conforms(''));
     }
 
 //--------------------------------------------------------------------------------------------------

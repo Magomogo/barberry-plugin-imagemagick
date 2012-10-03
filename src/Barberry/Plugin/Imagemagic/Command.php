@@ -45,6 +45,6 @@ class Command implements InterfaceCommand
 
     public function __toString()
     {
-        return strval($this->width . 'x' . $this->height);
+        return ($this->width || $this->height) ? strval($this->width . 'x' . $this->height) : '';
     }
 }
