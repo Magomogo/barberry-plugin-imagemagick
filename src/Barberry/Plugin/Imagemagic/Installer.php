@@ -8,7 +8,12 @@ use Composer\Script\Event;
 class Installer implements Plugin\InterfaceInstaller {
 
     public static function postPackageInstall(Event $event) {
-        print_r($installedPackage = $event->getOperation()->getPackage());
+        $event->getIo()->write(
+            print_r(
+                $event->getOperation()->getPackage(),
+                true
+            )
+        );
     }
 
     /**
