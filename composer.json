@@ -18,10 +18,5 @@
     ],
     "autoload": {
         "psr-0": {"Barberry\\Plugin\\Imagemagic": "src/"}
-    },
-    "scripts": {
-        "post-package-install": [
-            "Barberry\\Plugin\\Imagemagic\\Installer::postPackageInstall"
-        ]
     }
 }

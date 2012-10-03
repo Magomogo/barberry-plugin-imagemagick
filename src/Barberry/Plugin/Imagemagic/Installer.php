@@ -3,18 +3,8 @@ namespace Barberry\Plugin\Imagemagic;
 use Barberry\Plugin;
 use Barberry\Direction;
 use Barberry\ContentType;
-use Composer\Script\Event;
 
 class Installer implements Plugin\InterfaceInstaller {
-
-    public static function postPackageInstall(Event $event) {
-        $event->getIo()->write(
-            print_r(
-                $event->getOperation()->getPackage(),
-                true
-            )
-        );
-    }
 
     /**
      * @var string
