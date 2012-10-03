@@ -21,10 +21,10 @@ class Installer implements Plugin\InterfaceInstaller {
                 $pair[0],
                 eval('return ' .$pair[1] . ';'),
                 <<<PHP
-new Plugin_Imagemagic_Converter ($pair[1], '{$this->tempDirectory}');
+new Plugin\Imagemagic\Converter ($pair[1], '{$this->tempDirectory}');
 PHP
                 ,
-                'new Plugin_Imagemagic_Command'
+                'new Plugin\Imagemagic\Command'
             );
         }
     }
@@ -33,17 +33,17 @@ PHP
 
     private static function directions() {
         return array(
-            array(ContentType::jpeg(), 'ContentType::gif()'),
-            array(ContentType::jpeg(), 'ContentType::png()'),
-            array(ContentType::jpeg(), 'ContentType::jpeg()'),
+            array(ContentType::jpeg(), '\Barberry\ContentType::gif()'),
+            array(ContentType::jpeg(), '\Barberry\ContentType::png()'),
+            array(ContentType::jpeg(), '\Barberry\ContentType::jpeg()'),
 
-            array(ContentType::gif(), 'ContentType::jpeg()'),
-            array(ContentType::gif(), 'ContentType::png()'),
-            array(ContentType::gif(), 'ContentType::gif()'),
+            array(ContentType::gif(), '\Barberry\ContentType::jpeg()'),
+            array(ContentType::gif(), '\Barberry\ContentType::png()'),
+            array(ContentType::gif(), '\Barberry\ContentType::gif()'),
 
-            array(ContentType::png(), 'ContentType::jpeg()'),
-            array(ContentType::png(), 'ContentType::gif()'),
-            array(ContentType::png(), 'ContentType::png()'),
+            array(ContentType::png(), '\Barberry\ContentType::jpeg()'),
+            array(ContentType::png(), '\Barberry\ContentType::gif()'),
+            array(ContentType::png(), '\Barberry\ContentType::png()'),
         );
     }
 }
