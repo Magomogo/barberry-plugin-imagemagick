@@ -1,18 +1,12 @@
 {
     "name": "barberry/plugin-imagemagic",
-    "type": "barberry-plugin",
     "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/Magomogo/barberry-plugin-installer"
-        },
         {
             "type": "vcs",
             "url": "https://github.com/Magomogo/barberry-interfaces"
         }
     ],
     "require": {
-        "barberry/plugin-installer": "*",
         "barberry/interfaces": "*"
     },
     "minimum-stability": "dev",
@@ -24,5 +18,10 @@
     ],
     "autoload": {
         "psr-0": {"Barberry\\Plugin\\Imagemagic": "src/"}
+    },
+    "scripts": {
+        "post-package-install": [
+            "Barberry\\Plugin\\Imagemagic\\Installer::postPackageInstall"
+        ]
     }
 }

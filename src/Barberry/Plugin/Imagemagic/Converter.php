@@ -3,7 +3,7 @@ namespace Barberry\Plugin\Imagemagic;
 use Barberry\Plugin;
 use Barberry\ContentType;
 
-class Plugin_Imagemagic_Converter implements Plugin\InterfaceConverter {
+class Converter implements Plugin\InterfaceConverter {
 
     /**
      * @var string
