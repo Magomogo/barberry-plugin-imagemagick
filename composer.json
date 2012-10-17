@@ -1,16 +1,6 @@
 {
     "name": "barberry/plugin-imagemagic",
     "type": "barberry-plugin",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/Magomogo/barberry-plugin-installer"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/Magomogo/barberry-interfaces"
-        }
-    ],
     "require": {
         "barberry/plugin-installer": "*",
         "barberry/interfaces": "*"
