@@ -38,6 +38,19 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(self::command('')->conforms(''));
     }
 
+    public function testReplaceInitialSizesIntoMaxAndMin()
+    {
+        $command = self::command('9000x9000');
+        $this->assertEquals(800, $command->width());
+        $this->assertEquals(600, $command->height());
+    }
+
+    public function testInitialCommandStringEqualsObjectToStringConvertion()
+    {
+        $command = self::command('9000x9000');
+        $this->assertSame(strval($command),'9000x9000');
+    }
+
 //--------------------------------------------------------------------------------------------------
 
     private static function command($commandString = null)
