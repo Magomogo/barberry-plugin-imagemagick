@@ -21,8 +21,8 @@ class Command implements InterfaceCommand
         $params = explode("_", $commandString);
         foreach ($params as $val) {
             if (preg_match("@^([\d]*)x([\d]*)$@", $val, $regs)) {
-                $this->width = strlen($regs[1]) ? min((int)$regs[1], self::MAX_WIDTH) : null;
-                $this->height = strlen($regs[2]) ? min((int)$regs[2], self::MAX_HEIGHT) : null;
+                $this->width = strlen($regs[1]) ? (int)$regs[1] : null;
+                $this->height = strlen($regs[2]) ? (int)$regs[2] : null;
             }
         }
         return $this;
@@ -35,12 +35,12 @@ class Command implements InterfaceCommand
 
     public function width()
     {
-        return $this->width;
+        return min($this->width, self::MAX_WIDTH);
     }
 
     public function height()
     {
-        return $this->height;
+        return min($this->height, self::MAX_HEIGHT);
     }
 
     public function __toString()
