@@ -33,8 +33,7 @@ PHP
             );
         }
 
-        $monitorComposer->writeClassDeclaration('Imagemagic',
-            "new Plugin\\Imagemagic\\Monitor('{$this->tempDirectory}')");
+        $monitorComposer->writeClassDeclaration('Imagemagic', "parent::__construct('{$this->tempDirectory}')");
     }
 
 //--------------------------------------------------------------------------------------------------
