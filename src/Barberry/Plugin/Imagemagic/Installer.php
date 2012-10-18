@@ -3,6 +3,7 @@ namespace Barberry\Plugin\Imagemagic;
 
 use Barberry\Plugin;
 use Barberry\Direction;
+use Barberry\Monitor;
 use Barberry\ContentType;
 
 class Installer implements Plugin\InterfaceInstaller
@@ -17,19 +18,22 @@ class Installer implements Plugin\InterfaceInstaller
         $this->tempDirectory = $tempDirectory;
     }
 
-    public function install(Direction\ComposerInterface $composer)
+    public function install(Direction\ComposerInterface $directionComposer, Monitor\ComposerInterface $monitorComposer,
+        $pluginParams = array())
     {
         foreach (self::directions() as $pair) {
-            $composer->writeClassDeclaration(
+            $directionComposer->writeClassDeclaration(
                 $pair[0],
                 eval('return ' . $pair[1] . ';'),
                 <<<PHP
-new Plugin\Imagemagic\Converter ($pair[1], '{$this->tempDirectory}');
+new Plugin\\Imagemagic\\Converter ($pair[1], '{$this->tempDirectory}');
 PHP
                 ,
-                'new Plugin\Imagemagic\Command'
+                'new Plugin\\Imagemagic\\Command'
             );
         }
+
+        $monitorComposer->writeClassDeclaration('Imagemagic', "parent::__construct('{$this->tempDirectory}')");
     }
 
 //--------------------------------------------------------------------------------------------------
