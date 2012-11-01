@@ -1,5 +1,5 @@
 <?php
-namespace Barberry\Plugin\Imagemagic;
+namespace Barberry\Plugin\Imagemagick;
 
 class CommandTest extends \PHPUnit_Framework_TestCase
 {

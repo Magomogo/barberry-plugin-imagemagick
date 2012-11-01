@@ -1,5 +1,5 @@
 <?php
-namespace Barberry\Plugin\Imagemagic;
+namespace Barberry\Plugin\Imagemagick;
 use Barberry\Direction;
 use Barberry\Direction\Composer;
 use Barberry\Monitor;

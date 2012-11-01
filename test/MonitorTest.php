@@ -1,5 +1,5 @@
 <?php
-namespace Barberry\Plugin\Imagemagic;
+namespace Barberry\Plugin\Imagemagick;
 
 use Mockery as m;
 
@@ -26,7 +26,7 @@ class MonitoringTest extends \PHPUnit_Framework_TestCase
     public function testReturnErrorIfDirectoryIsNotWritable()
     {
         $monitor = new Monitor($this->testDirNotWritable);
-        $this->assertEquals(array('ERROR: Plugin imagemagic temporary directory is not writeable.'), $monitor->reportMalfunction());
+        $this->assertEquals(array('ERROR: Plugin imagemagick temporary directory is not writeable.'), $monitor->reportMalfunction());
     }
 
     public function testReturnOkIfDirectoryIsWritable()
@@ -37,7 +37,7 @@ class MonitoringTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnErrorIfNoUnixCommandFound()
     {
-        $monitor = $this->getMock('Barberry\Plugin\Imagemagic\Monitor', array('dependencies'), array($this->testDirWritable));
+        $monitor = $this->getMock('Barberry\Plugin\Imagemagick\Monitor', array('dependencies'), array($this->testDirWritable));
         $monitor->expects($this->any())->method('dependencies')->will($this->returnValue(array('no-command'=>'Please install no-command')));
         $this->assertEquals(array("MISSING - Please install no-command\n\n"), $monitor->reportUnmetDependencies());
     }

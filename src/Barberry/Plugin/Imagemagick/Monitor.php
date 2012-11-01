@@ -1,5 +1,5 @@
 <?php
-namespace Barberry\Plugin\Imagemagic;
+namespace Barberry\Plugin\Imagemagick;
 use Barberry\Plugin;
 
 class Monitor implements Plugin\InterfaceMonitor
@@ -7,7 +7,7 @@ class Monitor implements Plugin\InterfaceMonitor
     private $tempDirectory;
 
     private $dependencies = array(
-        'convert' => 'Please install imagemagic (http://www.imagemagick.org)'
+        'convert' => 'Please install imagemagick (http://www.imagemagick.org)'
     );
 
     public function __construct($tmpDir)
@@ -42,7 +42,7 @@ class Monitor implements Plugin\InterfaceMonitor
 
     private function reportWritableDirectory($directory)
     {
-        return (!is_writeable($directory)) ? 'ERROR: Plugin imagemagic temporary directory is not writeable.' : null;
+        return (!is_writeable($directory)) ? 'ERROR: Plugin imagemagick temporary directory is not writeable.' : null;
     }
 
     private function reportUnixCommand($command, $messageIfMissing)
