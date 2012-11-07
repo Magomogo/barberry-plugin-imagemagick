@@ -1,5 +1,5 @@
 <?php
-namespace Barberry\Plugin\Imagemagic;
+namespace Barberry\Plugin\Imagemagick;
 use Barberry\ContentType;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase

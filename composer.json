@@ -1,5 +1,5 @@
 {
-    "name": "barberry/plugin-imagemagic",
+    "name": "barberry/plugin-imagemagick",
     "type": "barberry-plugin",
     "version": "0.2",
     "license": "MIT",
@@ -15,6 +15,6 @@
         }
     ],
     "autoload": {
-        "psr-0": {"Barberry\\Plugin\\Imagemagic": "src/"}
+        "psr-0": {"Barberry\\Plugin\\Imagemagick": "src/"}
     }
 }

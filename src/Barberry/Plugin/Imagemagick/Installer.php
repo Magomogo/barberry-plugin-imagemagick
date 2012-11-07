@@ -1,5 +1,5 @@
 <?php
-namespace Barberry\Plugin\Imagemagic;
+namespace Barberry\Plugin\Imagemagick;
 
 use Barberry\Plugin;
 use Barberry\Direction;
@@ -15,12 +15,12 @@ class Installer implements Plugin\InterfaceInstaller
             $directionComposer->writeClassDeclaration(
                 $pair[0],
                 $pair[1],
-                'new Plugin\\Imagemagic\\Converter',
-                'new Plugin\\Imagemagic\\Command'
+                'new Plugin\\Imagemagick\\Converter',
+                'new Plugin\\Imagemagick\\Command'
             );
         }
 
-        $monitorComposer->writeClassDeclaration('Imagemagic');
+        $monitorComposer->writeClassDeclaration('Imagemagick');
     }
 
 //--------------------------------------------------------------------------------------------------
