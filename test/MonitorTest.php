@@ -5,7 +5,6 @@ use Mockery as m;
 
 class MonitoringTest extends \PHPUnit_Framework_TestCase
 {
-
     private $testDirWritable;
     private $testDirNotWritable;
 
@@ -25,20 +24,30 @@ class MonitoringTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnErrorIfDirectoryIsNotWritable()
     {
-        $monitor = new Monitor($this->testDirNotWritable);
+        $monitor = self::monitor($this->testDirNotWritable);
         $this->assertEquals(array('ERROR: Plugin imagemagic temporary directory is not writeable.'), $monitor->reportMalfunction());
     }
 
     public function testReturnOkIfDirectoryIsWritable()
     {
-        $monitor = new Monitor($this->testDirWritable);
+        $monitor = self::monitor($this->testDirWritable);
         $this->assertEquals(array(), $monitor->reportMalfunction());
     }
 
     public function testReturnErrorIfNoUnixCommandFound()
     {
-        $monitor = $this->getMock('Barberry\Plugin\Imagemagic\Monitor', array('dependencies'), array($this->testDirWritable));
-        $monitor->expects($this->any())->method('dependencies')->will($this->returnValue(array('no-command'=>'Please install no-command')));
+        $monitor = $this->getMock('Barberry\Plugin\Imagemagic\Monitor', array('dependencies'));
+        $monitor->configure($this->testDirWritable);
+        $monitor->expects($this->any())
+            ->method('dependencies')
+            ->will($this->returnValue(array('no-command'=>'Please install no-command')));
+
         $this->assertEquals(array("MISSING - Please install no-command\n\n"), $monitor->reportUnmetDependencies());
+    }
+
+    private static function monitor($tmpDir)
+    {
+        $monitor = new Monitor();
+        return $monitor->configure($tmpDir);
     }
 }

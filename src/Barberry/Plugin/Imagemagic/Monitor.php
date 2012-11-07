@@ -10,9 +10,10 @@ class Monitor implements Plugin\InterfaceMonitor
         'convert' => 'Please install imagemagic (http://www.imagemagick.org)'
     );
 
-    public function __construct($tmpDir)
+    public function configure($tmpDir)
     {
         $this->tempDirectory = $tmpDir;
+        return $this;
     }
 
     public function dependencies()

@@ -12,7 +12,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     private static function converter()
     {
-        return new Converter(ContentType::jpeg(), __DIR__ . '/../tmp/');
+        $converter = new Converter;
+        return $converter->configure(ContentType::jpeg(), __DIR__ . '/../tmp/');
     }
 
     private static function resize10x10Command()

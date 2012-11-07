@@ -25,8 +25,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public function testInstallsGIFtoJPGDirection()
     {
-        $installer = new Installer('/tmp/');
-        $installer->install(new Composer($this->directionDir), new Monitor\Composer($this->monitorDir));
+        $installer = new Installer();
+        $installer->install(new Composer($this->directionDir, '/tmp/'), new Monitor\Composer($this->monitorDir, '/tmp/'));
 
         include $this->directionDir . 'GifToJpg.php';
         $jpgToGif = new Direction\GifToJpgDirection('');

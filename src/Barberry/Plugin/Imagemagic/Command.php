@@ -5,7 +5,6 @@ use Barberry\Plugin\InterfaceCommand;
 
 class Command implements InterfaceCommand
 {
-
     const MAX_WIDTH = 800;
     const MAX_HEIGHT = 600;
 
@@ -14,7 +13,7 @@ class Command implements InterfaceCommand
 
     /**
      * @param string $commandString
-     * @return Command
+     * @return self
      */
     public function configure($commandString)
     {
