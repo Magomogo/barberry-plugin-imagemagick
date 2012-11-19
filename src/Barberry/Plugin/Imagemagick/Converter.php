@@ -28,7 +28,7 @@ class Converter implements Plugin\InterfaceConverter
             '-resize ' . $command->width() . 'x' . $command->height() : '';
         $source = tempnam($this->tempPath, "imagemagick_");
         chmod($source, 0664);
-        $destination = $source . '.' . $this->targetContentType->standartExtention();
+        $destination = $source . '.' . $this->targetContentType->standardExtension();
         file_put_contents($source, $bin);
         exec(
             'convert ' . $resize . ' ' . $source . ' ' . $destination
