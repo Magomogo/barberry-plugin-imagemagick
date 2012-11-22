@@ -31,7 +31,7 @@ class Converter implements Plugin\InterfaceConverter
         $destination = $source . '.' . $this->targetContentType->standardExtension();
         file_put_contents($source, $bin);
         exec(
-            'convert ' . $resize . ' ' . $source . ' ' . $destination
+            'convert -auto-orient ' . $resize . ' ' . $source . ' ' . $destination
         );
         if (is_file($destination)) {
             $bin = file_get_contents($destination);
