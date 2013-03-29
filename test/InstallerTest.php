@@ -29,7 +29,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $installer->install(new Composer($this->directionDir, '/tmp/'), new Monitor\Composer($this->monitorDir, '/tmp/'));
 
         include $this->directionDir . 'GifToJpg.php';
-        $jpgToGif = new Direction\GifToJpgDirection('');
+        $jpgToGif = new Direction\DirectionGifToJpg('');
         $this->assertNotNull($jpgToGif->convert(file_get_contents(__DIR__ . '/data/1x1.gif')));
     }
 }
