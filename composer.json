@@ -1,19 +1,40 @@
 {
     "name": "barberry/plugin-imagemagick",
     "type": "barberry-plugin",
-    "version": "0.2",
     "license": "MIT",
-    "require": {
-        "barberry/plugin-installer": "*",
-        "barberry/interfaces": "*"
-    },
-    "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "hamcrest/hamcrest",
+                "version": "1.1.0",
+                "dist": {
+                    "type": "zip",
+                    "url": "https://hamcrest.googlecode.com/files/hamcrest-php-1.1.0.zip"
+                },
+                "include-path": ["Hamcrest-1.1.0/"],
+                "autoload": {
+                    "psr-0": { "Hamcrest_": "Hamcrest-1.1.0/" },
+                    "files": ["Hamcrest-1.1.0/Hamcrest/Hamcrest.php"]
+                }
+            }
+        }
+    ],
     "authors": [
         {
             "name": "Maxim Gnatenko",
             "email": "maxim@xiag.ch"
         }
     ],
+    "require": {
+        "barberry/plugin-installer": "dev-master",
+        "barberry/interfaces": "dev-master"
+    },
+    "require-dev": {
+        "mockery/mockery": "0.7.*",
+        "phpunit/phpunit": "3.7.*",
+        "hamcrest/hamcrest": "1.1.0"
+    },
     "autoload": {
         "psr-0": {"Barberry\\Plugin\\Imagemagick": "src/"}
     }
