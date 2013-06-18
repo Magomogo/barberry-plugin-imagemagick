@@ -51,6 +51,43 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(strval($command),'9000x9000');
     }
 
+    public function testNoBackgroundByDefault()
+    {
+        $this->assertNull(self::command('100x100')->background());
+    }
+
+    public function testReadsBackgroundOnly()
+    {
+        $this->assertEquals('FFCCFF', self::command('bgFFCCFF')->background());
+    }
+
+    public function testReadsBackgroundAndResizeBoth()
+    {
+        $command = self::command('100x500bgFFCCFF');
+        $this->assertEquals(100, $command->width());
+        $this->assertEquals(500, $command->height());
+        $this->assertEquals('FFCCFF', $command->background());
+    }
+
+    public function testReadsCanvasWidthAndHeigh()
+    {
+        $command = self::command('canvas200x100');
+        $this->assertEquals(200, $command->canvasWidth());
+        $this->assertEquals(100, $command->canvasHeight());
+    }
+
+    public function testCanvasWidthAndHeightNullByDefault()
+    {
+        $command = self::command('200x100');
+        $this->assertNull($command->canvasWidth());
+        $this->assertNull($command->canvasHeight());
+    }
+
+    public function testBackgroundAndCanvasIncludedIntoStrval()
+    {
+        $this->assertEquals('200x100bgFF00FFcanvas300x200', strval(self::command('200x100bgFF00FFcanvas300x200')));
+    }
+
 //--------------------------------------------------------------------------------------------------
 
     private static function command($commandString = null)
