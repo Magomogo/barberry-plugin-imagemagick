@@ -24,15 +24,12 @@ class Converter implements Plugin\InterfaceConverter
 
     public function convert($bin, Plugin\InterfaceCommand $command = null)
     {
-        $resize = ($command->width() || $command->height()) ?
-            '-resize ' . $command->width() . 'x' . $command->height() : '';
+        $shellCommand = new ShellCommand($command);
         $source = tempnam($this->tempPath, "imagemagick_");
         chmod($source, 0664);
         $destination = $source . '.' . $this->targetContentType->standardExtension();
         file_put_contents($source, $bin);
-        exec(
-            'convert -auto-orient ' . $resize . ' ' . $source . ' ' . $destination
-        );
+        exec('convert ' . $source . ' '  . strval($shellCommand) . ' ' . $destination);
         if (is_file($destination)) {
             $bin = file_get_contents($destination);
             unlink($destination);
