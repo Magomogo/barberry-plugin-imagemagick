@@ -27,7 +27,7 @@
         }
     ],
     "require": {
-        "barberry/plugin-installer": "1.0.*",
+        "barberry/plugin-installer": "dev-composer-plugin",
         "barberry/interfaces": "1.1.*"
     },
     "require-dev": {
