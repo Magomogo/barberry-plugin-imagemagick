@@ -13,6 +13,7 @@ class Command implements InterfaceCommand
     private $background;
     private $canvasWidth;
     private $canvasHeight;
+    private $quality;
 
     /**
      * @param string $commandString
@@ -32,6 +33,9 @@ class Command implements InterfaceCommand
             if (preg_match("@canvas([\d]*)x([\d]*)@", $val, $regs)) {
                 $this->canvasWidth = strlen($regs[1]) ? (int)$regs[1] : null;
                 $this->canvasHeight = strlen($regs[2]) ? (int)$regs[2] : null;
+            }
+            if (preg_match("@quality([\d]*)@", $val, $regs)) {
+                $this->quality = strlen($regs[1]) ? (int)$regs[1] : null;
             }
         }
         return $this;
@@ -67,6 +71,11 @@ class Command implements InterfaceCommand
         return min($this->canvasHeight, self::MAX_HEIGHT);
     }
 
+    public function quality()
+    {
+        return $this->quality;
+    }
+
     public function __toString()
     {
         $str = ($this->width || $this->height) ? strval($this->width . 'x' . $this->height) : '';
@@ -75,6 +84,9 @@ class Command implements InterfaceCommand
         }
         if ($this->canvasWidth || $this->canvasHeight) {
             $str .= 'canvas' . strval($this->canvasWidth . 'x' . $this->canvasHeight);
+        }
+        if ($this->quality) {
+            $str .= 'quality' . $this->quality;
         }
         return $str;
     }
