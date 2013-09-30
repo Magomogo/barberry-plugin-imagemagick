@@ -10,11 +10,11 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(ContentType::jpeg(), ContentType::byString($bin));
     }
 
-    public function testConvertsGifToJpegWithResizingAndBackgroundAndCanvas()
+    public function testConvertsGifToJpegWithResizingAndBackgroundAndCanvasAndQuality()
     {
         $bin = self::converter()->convert(
             file_get_contents(__DIR__ . '/data/1x1.gif'),
-            self::resize10x10bgFF00FFcanvas20x20Command()
+            self::resize10x10bgFF00FFcanvas20x20quality41Command()
         );
         $this->assertEquals(ContentType::jpeg(), ContentType::byString($bin));
     }
@@ -32,10 +32,10 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         return $command;
     }
 
-    private static function resize10x10bgFF00FFcanvas20x20Command()
+    private static function resize10x10bgFF00FFcanvas20x20quality41Command()
     {
         $command = new Command();
-        $command->configure('10x10bgFF00FFcanvas20x20');
+        $command->configure('10x10bgFF00FFcanvas20x20quality41');
         return $command;
     }
 }
