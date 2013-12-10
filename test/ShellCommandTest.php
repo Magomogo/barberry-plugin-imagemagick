@@ -30,6 +30,14 @@ class ShellCommandTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testInsertsColorspaceKey()
+    {
+        $this->assertEquals(
+            '-auto-orient -colorspace Gray',
+            self::shellCommandString('colorspaceGray')
+        );
+    }
+
     public function testResizeAndBackgroundAndCanvas()
     {
         $this->assertEquals(

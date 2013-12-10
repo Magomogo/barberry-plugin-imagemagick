@@ -45,6 +45,9 @@ class ShellCommand {
         if (!is_null($this->command->quality())) {
             $string .= ' -quality ' . $this->command->quality();
         }
+        if (!is_null($this->command->colorspace())) {
+            $string .= ' -colorspace ' . $this->command->colorspace();
+        }
         return $string;
     }
 

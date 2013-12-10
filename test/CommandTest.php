@@ -66,6 +66,11 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(55, self::command('quality55')->quality());
     }
 
+    public function testReadsColorSpaceOnly()
+    {
+        $this->assertEquals('Gray', self::command('colorspaceGray')->colorspace());
+    }
+
     public function testReadsBackgroundAndResizeBoth()
     {
         $command = self::command('100x500bgFFCCFF');
@@ -90,7 +95,10 @@ class CommandTest extends \PHPUnit_Framework_TestCase
 
     public function testBackgroundAndCanvasIncludedIntoStrval()
     {
-        $this->assertEquals('200x100bgFF00FFcanvas300x200quality88', strval(self::command('200x100bgFF00FFcanvas300x200quality88')));
+        $this->assertEquals(
+            '200x100bgFF00FFcanvas300x200quality88colorspaceGray',
+            strval(self::command('200x100bgFF00FFcanvas300x200quality88colorspaceGray'))
+        );
     }
 
 //--------------------------------------------------------------------------------------------------

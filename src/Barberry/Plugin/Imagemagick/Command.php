@@ -14,6 +14,7 @@ class Command implements InterfaceCommand
     private $canvasWidth;
     private $canvasHeight;
     private $quality;
+    private $colorspace;
 
     /**
      * @param string $commandString
@@ -36,6 +37,9 @@ class Command implements InterfaceCommand
             }
             if (preg_match("@quality([\d]*)@", $val, $regs)) {
                 $this->quality = strlen($regs[1]) ? (int)$regs[1] : null;
+            }
+            if (preg_match("@colorspace(Gray|CMYK|sRGB|Transparent|RGB)@", $val, $regs)) {
+                $this->colorspace = strlen($regs[1]) ? $regs[1] : null;
             }
         }
         return $this;
@@ -76,6 +80,11 @@ class Command implements InterfaceCommand
         return $this->quality;
     }
 
+    public function colorspace()
+    {
+        return $this->colorspace;
+    }
+
     public function __toString()
     {
         $str = ($this->width || $this->height) ? strval($this->width . 'x' . $this->height) : '';
@@ -87,6 +96,9 @@ class Command implements InterfaceCommand
         }
         if ($this->quality) {
             $str .= 'quality' . $this->quality;
+        }
+        if ($this->colorspace) {
+            $str .= 'colorspace' . $this->colorspace;
         }
         return $str;
     }
