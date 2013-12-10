@@ -25,6 +25,7 @@ Background color of image in format 11AAFF (hex code format without # at the beg
 
 Info about height and width of canvas
 the real added params for image imagemagick will be:
+
     -size [width]x[height] xc:#[color] +swap -gravity center -composite
 
 `[color]` by default is 000000 if no background color is set, otherwise uses bg color
@@ -37,4 +38,5 @@ Quality of jpeg image in percents. Range from 1 to 100
 
 The [colorspace](http://www.imagemagick.org/script/command-line-options.php#colorspace "imagemagick docs") of image.
 Allowed colorspaces:
+
     Gray|CMYK|sRGB|Transparent|RGB
