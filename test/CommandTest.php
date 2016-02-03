@@ -61,6 +61,11 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('FFCCFF', self::command('bgFFCCFF')->background());
     }
 
+    public function testReadsShortBackgroundOnly()
+    {
+        $this->assertEquals('FFF', self::command('bgFFF')->background());
+    }
+
     public function testReadsQualityOnly()
     {
         $this->assertEquals(55, self::command('quality55')->quality());

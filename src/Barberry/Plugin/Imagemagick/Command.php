@@ -28,7 +28,7 @@ class Command implements InterfaceCommand
                 $this->width = strlen($regs[1]) ? (int)$regs[1] : null;
                 $this->height = strlen($regs[2]) ? (int)$regs[2] : null;
             }
-            if (preg_match("@bg([0-F]{6})@", $val, $regs)) {
+            if (preg_match("@bg([0-F]{3,6})@", $val, $regs)) {
                 $this->background = $regs[1];
             }
             if (preg_match("@canvas([\d]*)x([\d]*)@", $val, $regs)) {
