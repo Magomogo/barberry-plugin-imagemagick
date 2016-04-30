@@ -28,7 +28,7 @@
     ],
     "require": {
         "barberry/plugin-installer": "*",
-        "barberry/interfaces": "~1.1.1"
+        "barberry/interfaces": "^1.0"
     },
     "require-dev": {
         "mockery/mockery": "0.7.*",
