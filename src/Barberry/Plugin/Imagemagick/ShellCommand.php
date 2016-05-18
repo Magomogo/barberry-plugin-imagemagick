@@ -40,7 +40,7 @@ class ShellCommand {
         if ($this->command->canvasWidth() || $this->command->canvasHeight()) {
             $string .=
                 ' -size ' . $this->command->canvasWidth() . 'x' . $this->command->canvasHeight() .
-                ' xc:#' . $this->canvasColor() . ' +swap -gravity center -composite';
+                ' xc:#' . $this->canvasColor() . ' +swap -gravity center -compose src-over -composite';
         }
         if (!is_null($this->command->quality())) {
             $string .= ' -quality ' . $this->command->quality();
