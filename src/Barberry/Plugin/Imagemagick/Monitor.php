@@ -48,6 +48,6 @@ class Monitor implements Plugin\InterfaceMonitor
 
     private function reportUnixCommand($command, $messageIfMissing)
     {
-        return preg_match('/^\/\w+/', exec("which $command")) ? null : "MISSING - $messageIfMissing\n\n";
+        return preg_match('/^\/\w+/', exec("which $command 2>&1")) ? null : "MISSING - $messageIfMissing\n\n";
     }
 }

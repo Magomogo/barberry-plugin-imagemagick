@@ -10,8 +10,8 @@ class MonitoringTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->testDirNotWritable = realpath(__DIR__ . '/../tmp') . '/testdir-notwritable/';
-        $this->testDirWritable = realpath(__DIR__ . '/../tmp') . '/testdir-writable/';
+        $this->testDirNotWritable = '/tmp/testdir-notwritable/';
+        $this->testDirWritable = '/tmp/testdir-writable/';
         @mkdir($this->testDirNotWritable, 0444, true);
         @mkdir($this->testDirWritable, 0777, true);
     }
