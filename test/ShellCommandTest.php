@@ -54,6 +54,14 @@ class ShellCommandTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testAppliesColorspaceBeforeCanvas()
+    {
+        $this->assertStringStartsWith(
+            '-auto-orient -colorspace RGB -resize',
+            self::shellCommandString('150x100canvas250x150colorspaceRGB')
+        );
+    }
+
     private static function shellCommandString($string)
     {
         $command = new Command();

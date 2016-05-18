@@ -31,6 +31,9 @@ class ShellCommand {
     public function __toString()
     {
         $string = '-auto-orient';
+        if (!is_null($this->command->colorspace())) {
+            $string .= ' -colorspace ' . $this->command->colorspace();
+        }
         if ($this->command->width() || $this->command->height()) {
             $string .= ' -resize ' . $this->command->width() . 'x' . $this->command->height();
         }
@@ -45,12 +48,8 @@ class ShellCommand {
         if (!is_null($this->command->quality())) {
             $string .= ' -quality ' . $this->command->quality();
         }
-        if (!is_null($this->command->colorspace())) {
-            $string .= ' -colorspace ' . $this->command->colorspace();
-        }
         return $string;
     }
-
 
     private function canvasColor()
     {
