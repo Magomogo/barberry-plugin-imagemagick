@@ -37,6 +37,7 @@ class Installer implements Plugin\InterfaceInstaller
             array(ContentType::png(), \Barberry\ContentType::jpeg()),
             array(ContentType::png(), \Barberry\ContentType::gif()),
             array(ContentType::png(), \Barberry\ContentType::png()),
+            array(ContentType::ico(), \Barberry\ContentType::ico()),
         );
     }
 }
