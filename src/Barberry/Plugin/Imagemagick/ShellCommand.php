@@ -48,6 +48,12 @@ class ShellCommand {
         if (!is_null($this->command->quality())) {
             $string .= ' -quality ' . $this->command->quality();
         }
+        if (!is_null($this->command->trimColor()) || !is_null($this->command->trimFuzz())) {
+            $string .=
+                ($this->command->trimColor() ? " -bordercolor \"#{$this->command->trimColor()}\" -border 1x1" : "") .
+                ($this->command->trimFuzz() ? " -fuzz {$this->command->trimFuzz()}%" : "") .
+                " -trim +repage";
+        }
         return $string;
     }
 
