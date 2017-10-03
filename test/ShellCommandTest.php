@@ -62,6 +62,22 @@ class ShellCommandTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testAppliesTrimWithNoAdditionalParams()
+    {
+        $this->assertStringStartsWith(
+            '-auto-orient -trim +repage',
+            self::shellCommandString('trimx')
+        );
+    }
+
+    public function testAppliesTrimWithAdditionalParams()
+    {
+        $this->assertStringStartsWith(
+            '-auto-orient -bordercolor "#ABC" -border 1x1 -fuzz 10% -trim +repage',
+            self::shellCommandString('trimABCx10')
+        );
+    }
+
     private static function shellCommandString($string)
     {
         $command = new Command();

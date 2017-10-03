@@ -15,6 +15,8 @@ class Command implements InterfaceCommand
     private $canvasHeight;
     private $quality;
     private $colorspace;
+    private $trimColor;
+    private $trimFuzz;
 
     /**
      * @param string $commandString
@@ -40,6 +42,10 @@ class Command implements InterfaceCommand
             }
             if (preg_match("@colorspace(Gray|CMYK|sRGB|Transparent|RGB)@", $val, $regs)) {
                 $this->colorspace = strlen($regs[1]) ? $regs[1] : null;
+            }
+            if (preg_match("@trim((?:[0-F]{3,6})?)x((?:\d{1,2})?)@", $val, $regs)) {
+                $this->trimColor = $regs[1];
+                $this->trimFuzz = $regs[2];
             }
         }
         return $this;
@@ -85,6 +91,17 @@ class Command implements InterfaceCommand
         return $this->colorspace;
     }
 
+
+    public function trimColor()
+    {
+        return $this->trimColor;
+    }
+
+    public function trimFuzz()
+    {
+        return $this->trimFuzz;
+    }
+
     public function __toString()
     {
         $str = ($this->width || $this->height) ? strval($this->width . 'x' . $this->height) : '';
@@ -99,6 +116,9 @@ class Command implements InterfaceCommand
         }
         if ($this->colorspace) {
             $str .= 'colorspace' . $this->colorspace;
+        }
+        if (!is_null($this->trimColor) || !is_null($this->trimFuzz)) {
+            $str .= 'trim' . strval($this->trimColor . 'x' . $this->trimFuzz);
         }
         return $str;
     }

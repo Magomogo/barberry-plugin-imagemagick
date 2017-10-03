@@ -40,3 +40,13 @@ The [colorspace](http://www.imagemagick.org/script/command-line-options.php#colo
 Allowed colorspaces:
 
     Gray|CMYK|sRGB|Transparent|RGB
+
+### trim[color]x[percent]
+
+[Remove](http://www.imagemagick.org/Usage/crop/#trim "imagemagick docs") any borders or edges of an image 
+which did does not change in color or transparency.
+In other words it removes the 'boring' bits surrounding an image.
+
+`[color]` is color, which you want to trim
+
+`[percent]` is percent of fuzz to be applied while trimming (more percent, possibly more image will be cut)
