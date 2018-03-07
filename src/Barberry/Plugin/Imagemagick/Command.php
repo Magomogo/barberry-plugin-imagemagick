@@ -46,7 +46,7 @@ class Command implements InterfaceCommand
             if (preg_match("@colorspace(Gray|CMYK|sRGB|Transparent|RGB)@", $val, $regs)) {
                 $this->colorspace = strlen($regs[1]) ? $regs[1] : null;
             }
-            if (preg_match("@trim((?:[0-F]{3,6})?)x((?:\d{1,2})?)@", $val, $regs)) {
+            if (preg_match("@trim((?:[0-F]{3,6})?)x?((?:\d{1,2})?)@", $val, $regs)) {
                 $this->trimColor = $regs[1];
                 $this->trimFuzz = $regs[2];
             }
@@ -134,11 +134,18 @@ class Command implements InterfaceCommand
             $str .= 'colorspace' . $this->colorspace;
         }
         if (!is_null($this->trimColor) || !is_null($this->trimFuzz)) {
-            $str .= 'trim' . strval($this->trimColor . 'x' . $this->trimFuzz);
+            $str .= 'trim';
+            if (!empty($this->trimColor)) {
+                $str .= (string) $this->trimColor;
+            }
+            if (!empty($this->trimFuzz)) {
+                $str .= 'x' . (string) $this->trimFuzz;
+            }
         }
         if ($this->stripColorProfiles) {
             $str .= 'strip';
         }
+
         return $str;
     }
 }
