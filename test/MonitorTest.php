@@ -1,8 +1,6 @@
 <?php
 namespace Barberry\Plugin\Imagemagick;
 
-use Mockery as m;
-
 class MonitoringTest extends \PHPUnit_Framework_TestCase
 {
     private $testDirWritable;
@@ -36,7 +34,11 @@ class MonitoringTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnErrorIfNoUnixCommandFound()
     {
-        $monitor = $this->getMock('Barberry\Plugin\Imagemagick\Monitor', array('dependencies'));
+        $monitor = $this->getMockBuilder('Barberry\Plugin\Imagemagick\Monitor')
+            ->setMethods(['dependencies'])
+            ->enableOriginalConstructor()
+            ->getMock();
+
         $monitor->configure($this->testDirWritable);
         $monitor->expects($this->any())
             ->method('dependencies')

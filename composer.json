@@ -9,12 +9,12 @@
         }
     ],
     "require": {
-        "barberry/plugin-installer": "*",
-        "barberry/interfaces": "^1.0"
+        "php": "^5.6 || ^7.0",
+        "barberry/interfaces": "^2.0",
+        "barberry/plugin-installer": "^2.0"
     },
     "require-dev": {
-        "mockery/mockery": "0.7.*",
-        "phpunit/phpunit": "3.7.*"
+        "phpunit/phpunit": "^5.7"
     },
     "autoload": {
         "psr-0": {"Barberry\\Plugin\\Imagemagick": "src/"}
