@@ -10,6 +10,15 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(ContentType::jpeg(), ContentType::byString($bin));
     }
 
+    public function testNoUpscaleDoesNoChangeSmallGIF()
+    {
+        $binInput = file_get_contents(__DIR__ . '/data/1x1.gif');
+        $binOutput = self::converter()->convert($binInput, self::command('1000x1000noUpscale'));
+        $image = imagecreatefromstring($binOutput);
+        $this->assertEquals(1, imagesx($image));
+        $this->assertEquals(1, imagesy($image));
+    }
+
     public function testConvertsGifToJpegWithResizingAndBackgroundAndCanvasAndQuality()
     {
         $bin = self::converter()->convert(
@@ -29,6 +38,13 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     {
         $command = new Command();
         $command->configure('10x10');
+        return $command;
+    }
+
+    private static function command($config)
+    {
+        $command = new Command();
+        $command->configure($config);
         return $command;
     }
 
