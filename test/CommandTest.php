@@ -98,39 +98,66 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($command->canvasHeight());
     }
 
-    public function testFullTrimMod()
+    /**
+     * @param string $strCommand
+     * @param string $color
+     * @param string $fuzz
+     * @dataProvider dpTestOnlyTrimColor
+     */
+    public function testTrim($strCommand, $color, $fuzz)
     {
-        $command = self::command('trimAABBCCx2');
-        $this->assertEquals('AABBCC', $command->trimColor());
-        $this->assertEquals('2', $command->trimFuzz());
+        $command = self::command($strCommand);
+        $this->assertEquals($color, $command->trimColor());
+        $this->assertEquals($fuzz, $command->trimFuzz());
+        $this->assertEquals($strCommand, (string) $command);
     }
 
-    public function testOnlyTrimColor()
+    public function dpTestOnlyTrimColor()
     {
-        $command = self::command('trimAABBCCx');
-        $this->assertEquals('AABBCC', $command->trimColor());
-        $this->assertEquals('', $command->trimFuzz());
-    }
-
-    public function testOnlyTrimFuzz()
-    {
-        $command = self::command('trimx10');
-        $this->assertEquals('', $command->trimColor());
-        $this->assertEquals('10', $command->trimFuzz());
-    }
-
-    public function testSimpleTrim()
-    {
-        $command = self::command('trimx');
-        $this->assertEquals('trimx', strval($command));
+        return [
+            [
+                'trimAABBCC',
+                'AABBCC',
+                ''
+            ],
+            [
+                'trimFFF',
+                'FFF',
+                ''
+            ],
+            [
+                'trimAABBCCx2',
+                'AABBCC',
+                '2'
+            ],
+            [
+                'trimFFFx50',
+                'FFF',
+                '50'
+            ],
+            [
+                'trimx10',
+                '',
+                '10'
+            ],
+            [
+                'trim',
+                '',
+                ''
+            ]
+        ];
     }
 
     public function testCanConstructSameUrlUrlWithAllParams()
     {
-        $this->assertEquals(
-            '200x100bgFF00FFcanvas300x200quality88colorspaceGraytrimAABBCCx1',
-            strval(self::command('200x100bgFF00FFcanvas300x200quality88colorspaceGraytrimAABBCCx1'))
-        );
+        $command = '200x100bgFF00FFcanvas300x200quality88colorspaceGraytrimAABBCCx1';
+        $this->assertEquals($command, strval(self::command($command)));
+    }
+
+    public function testCanConstructSameUrlUrlWithAllParamsAndSimpleTrim()
+    {
+        $command = '200x100bgFF00FFcanvas300x200quality88colorspaceGraytrim';
+        $this->assertEquals($command, strval(self::command($command)));
     }
 
 //--------------------------------------------------------------------------------------------------
