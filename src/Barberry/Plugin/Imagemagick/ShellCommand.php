@@ -35,7 +35,7 @@ class ShellCommand {
             $string .= ' -colorspace ' . $this->command->colorspace();
         }
         if ($this->command->width() || $this->command->height()) {
-            $string .= ' -resize ' . $this->command->width() . 'x' . $this->command->height();
+            $string .= ' -resize "' . $this->command->width() . 'x' . $this->command->height() . ($this->command->noUpscale() ? '>' : '') . '"';
         }
         if (!is_null($this->command->background())) {
             $string .= ' -background "#' . $this->command->background() . '" -flatten';

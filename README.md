@@ -11,11 +11,11 @@ Parameters syntax:
 All parameters must be listed with no separators and the order of parameters cannot be changed.
 Any parameter can be ommited.
 
-    [width]x[height]bg[color]canvas[width]x[height]quality[percent]colorspace[name]
+    [width]x[height][noUpscale]bg[color]canvas[width]x[height]quality[percent]colorspace[name]
 
-### [width]x[height]
+### [width]x[height][noUpscale]
 
-Main info about height and width of corresponding image
+Main info about height and width of corresponding image. In case `noUpscale` provided image will only shrink, but never grow.
 
 ### bg[color]
 

@@ -10,6 +10,7 @@ class Command implements InterfaceCommand
 
     private $width;
     private $height;
+    private $noUpscale;
     private $background;
     private $canvasWidth;
     private $canvasHeight;
@@ -26,9 +27,10 @@ class Command implements InterfaceCommand
     {
         $params = explode("_", $commandString);
         foreach ($params as $val) {
-            if (preg_match("@^([\d]*)x([\d]*)@", $val, $regs)) {
+            if (preg_match("@^([\d]*)x([\d]*)(noUpscale|)@", $val, $regs)) {
                 $this->width = strlen($regs[1]) ? (int)$regs[1] : null;
                 $this->height = strlen($regs[2]) ? (int)$regs[2] : null;
+                $this->noUpscale = strlen($regs[3]) ? true : false;
             }
             if (preg_match("@bg([0-F]{3,6})@", $val, $regs)) {
                 $this->background = $regs[1];
@@ -64,6 +66,11 @@ class Command implements InterfaceCommand
     public function height()
     {
         return min($this->height, self::MAX_HEIGHT);
+    }
+
+    public function noUpscale()
+    {
+        return $this->noUpscale === true;
     }
 
     public function background()
@@ -104,7 +111,7 @@ class Command implements InterfaceCommand
 
     public function __toString()
     {
-        $str = ($this->width || $this->height) ? strval($this->width . 'x' . $this->height) : '';
+        $str = ($this->width || $this->height) ? strval($this->width . 'x' . $this->height) . ($this->noUpscale ? 'noUpscale' : '') : '';
         if ($this->background) {
             $str .= 'bg' . $this->background;
         }
