@@ -54,6 +54,9 @@ class ShellCommand {
                 ($this->command->trimFuzz() ? " -fuzz {$this->command->trimFuzz()}%" : "") .
                 " -trim +repage";
         }
+        if ($this->command->stripColorProfiles()) {
+            $string .= ' -strip';
+        }
         return $string;
     }
 
