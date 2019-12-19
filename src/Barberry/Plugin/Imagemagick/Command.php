@@ -18,6 +18,7 @@ class Command implements InterfaceCommand
     private $colorspace;
     private $trimColor;
     private $trimFuzz;
+    private $stripColorProfiles;
 
     /**
      * @param string $commandString
@@ -49,6 +50,9 @@ class Command implements InterfaceCommand
                 $this->trimColor = $regs[1];
                 $this->trimFuzz = $regs[2];
             }
+            if (preg_match("@strip@", $val)) {
+                $this->stripColorProfiles = true;
+            }
         }
         return $this;
     }
@@ -71,6 +75,11 @@ class Command implements InterfaceCommand
     public function noUpscale()
     {
         return $this->noUpscale === true;
+    }
+
+    public function stripColorProfiles()
+    {
+        return $this->stripColorProfiles === true;
     }
 
     public function background()
@@ -126,6 +135,9 @@ class Command implements InterfaceCommand
         }
         if (!is_null($this->trimColor) || !is_null($this->trimFuzz)) {
             $str .= 'trim' . strval($this->trimColor . 'x' . $this->trimFuzz);
+        }
+        if ($this->stripColorProfiles) {
+            $str .= 'strip';
         }
         return $str;
     }

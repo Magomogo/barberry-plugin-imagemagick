@@ -17,6 +17,11 @@ class ShellCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('-auto-orient', self::shellCommandString(''));
     }
 
+    public function testStripColorProfilesCommand()
+    {
+        $this->assertEquals('-auto-orient -strip', self::shellCommandString('strip'));
+    }
+
     public function testResizeOnly()
     {
         $this->assertEquals('-auto-orient -resize "150x100"', self::shellCommandString('150x100'));

@@ -11,7 +11,7 @@ Parameters syntax:
 All parameters must be listed with no separators and the order of parameters cannot be changed.
 Any parameter can be ommited.
 
-    [width]x[height][noUpscale]bg[color]canvas[width]x[height]quality[percent]colorspace[name]
+    [width]x[height][noUpscale]bg[color]canvas[width]x[height]quality[percent]colorspace[name]strip
 
 ### [width]x[height][noUpscale]
 
@@ -50,3 +50,7 @@ In other words it removes the 'boring' bits surrounding an image.
 `[color]` is color, which you want to trim
 
 `[percent]` is percent of fuzz to be applied while trimming (more percent, possibly more image will be cut)
+
+### strip
+
+In some cases color profiles can take up significant part of your image, especially if image is small or resized. This option allows to cut color profiles out.

@@ -4,6 +4,22 @@ use Barberry\ContentType;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
+    public function testRemovesColorProfileInformation()
+    {
+        $bin = self::converter()->convert(file_get_contents(__DIR__ . '/data/colorProfile.jpeg'), self::command('strip'));
+        $tmpFile = self::tmpDir() . 'profilesCheckRemove.jpg';
+        file_put_contents($tmpFile, $bin);
+        $this->assertEquals('', exec('identify -verbose "' . $tmpFile . '" | grep "Profile-"'));
+    }
+
+    public function testKeepsColorProfileInformation()
+    {
+        $bin = self::converter()->convert(file_get_contents(__DIR__ . '/data/colorProfile.jpeg'), self::command(''));
+        $tmpFile = self::tmpDir() . 'profilesCheckKeep.jpg';
+        file_put_contents($tmpFile, $bin);
+        $this->assertEquals('    Profile-xmp: 16763 bytes', exec('identify -verbose "' . $tmpFile . '" | grep "Profile-"'));
+    }
+
     public function testConvertsGifToJpegWithResizing()
     {
         $bin = self::converter()->convert(file_get_contents(__DIR__ . '/data/1x1.gif'), self::command('10x10'));
@@ -31,7 +47,11 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     private static function converter()
     {
         $converter = new Converter;
-        return $converter->configure(ContentType::jpeg(), __DIR__ . '/../tmp/');
+        return $converter->configure(ContentType::jpeg(), self::tmpDir());
+    }
+
+    private static function tmpDir() {
+        return __DIR__ . '/../tmp/';
     }
 
     private static function command($config)
