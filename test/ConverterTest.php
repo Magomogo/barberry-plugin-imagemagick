@@ -8,20 +8,20 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     {
         $bin = self::converter()->convert(file_get_contents(__DIR__ . '/data/colorProfile.jpeg'), self::command('strip'));
         $tmpFile = self::tmpDir() . 'profilesCheckRemove.jpg';
-        @unlink(filename);
+        @unlink($tmpFile);
         file_put_contents($tmpFile, $bin);
         $this->assertEquals('', exec('identify -verbose "' . $tmpFile . '" | grep "Profile-"'));
-        @unlink(filename);
+        unlink($tmpFile);
     }
 
     public function testKeepsColorProfileInformation()
     {
         $bin = self::converter()->convert(file_get_contents(__DIR__ . '/data/colorProfile.jpeg'), self::command(''));
         $tmpFile = self::tmpDir() . 'profilesCheckKeep.jpg';
-        @unlink(filename);
+        @unlink($tmpFile);
         file_put_contents($tmpFile, $bin);
         $this->assertEquals('    Profile-xmp: 16763 bytes', exec('identify -verbose "' . $tmpFile . '" | grep "Profile-"'));
-        @unlink(filename);
+        unlink($tmpFile);
     }
 
     public function testConvertsGifToJpegWithResizing()
