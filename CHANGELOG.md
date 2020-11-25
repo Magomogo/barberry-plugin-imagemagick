@@ -1,3 +1,6 @@
+# Version 3.0.0
+- Compatibility with composer v2
+
 # Version 2.2.0
 
 - *New feature* :: Added [strip](https://github.com/Magomogo/barberry-plugin-imagemagick#strip) option
