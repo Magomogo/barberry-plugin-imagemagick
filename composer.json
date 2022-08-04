@@ -18,5 +18,10 @@
     },
     "autoload": {
         "psr-0": {"Barberry\\Plugin\\Imagemagick": "src/"}
+    },
+    "config": {
+        "allow-plugins": {
+            "barberry/plugin-installer": true
+        }
     }
 }

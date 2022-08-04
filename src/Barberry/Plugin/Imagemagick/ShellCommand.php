@@ -43,7 +43,7 @@ class ShellCommand {
         if ($this->command->canvasWidth() || $this->command->canvasHeight()) {
             $string .=
                 ' -size ' . $this->command->canvasWidth() . 'x' . $this->command->canvasHeight() .
-                ' xc:#' . $this->canvasColor() . ' +swap -gravity center -compose src-over -composite';
+                ' xc:' . $this->canvasColor() . ' +swap -gravity center -compose src-over -composite';
         }
         if (!is_null($this->command->quality())) {
             $string .= ' -quality ' . $this->command->quality();
@@ -62,6 +62,6 @@ class ShellCommand {
 
     private function canvasColor()
     {
-        return is_null($this->command->background()) ? '000000' : $this->command->background();
+        return is_null($this->command->background()) ? 'none' : '#' . $this->command->background();
     }
 }

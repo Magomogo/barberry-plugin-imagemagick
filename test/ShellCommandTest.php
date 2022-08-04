@@ -56,10 +56,10 @@ class ShellCommandTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testResizeAndCanvasOnlyUseBlackBackground()
+    public function testResizeAndCanvasOnlyUseTransparentBackground()
     {
         $this->assertEquals(
-            '-auto-orient -resize "150x100" -size 250x150 xc:#000000 +swap -gravity center -compose src-over -composite',
+            '-auto-orient -resize "150x100" -size 250x150 xc:none +swap -gravity center -compose src-over -composite',
             self::shellCommandString('150x100canvas250x150')
         );
     }
