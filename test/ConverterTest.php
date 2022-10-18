@@ -4,17 +4,46 @@ use Barberry\ContentType;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
+    public function testRemovesColorProfileInformation()
+    {
+        $bin = self::converter()->convert(file_get_contents(__DIR__ . '/data/colorProfile.jpeg'), self::command('strip'));
+        $tmpFile = self::tmpDir() . 'profilesCheckRemove.jpg';
+        @unlink($tmpFile);
+        file_put_contents($tmpFile, $bin);
+        $this->assertEquals('', exec('identify -verbose "' . $tmpFile . '" | grep "Profile-"'));
+        unlink($tmpFile);
+    }
+
+    public function testKeepsColorProfileInformation()
+    {
+        $bin = self::converter()->convert(file_get_contents(__DIR__ . '/data/colorProfile.jpeg'), self::command(''));
+        $tmpFile = self::tmpDir() . 'profilesCheckKeep.jpg';
+        @unlink($tmpFile);
+        file_put_contents($tmpFile, $bin);
+        $this->assertEquals('    Profile-xmp: 16763 bytes', exec('identify -verbose "' . $tmpFile . '" | grep "Profile-"'));
+        unlink($tmpFile);
+    }
+
     public function testConvertsGifToJpegWithResizing()
     {
-        $bin = self::converter()->convert(file_get_contents(__DIR__ . '/data/1x1.gif'), self::resize10x10Command());
+        $bin = self::converter()->convert(file_get_contents(__DIR__ . '/data/1x1.gif'), self::command('10x10'));
         $this->assertEquals(ContentType::jpeg(), ContentType::byString($bin));
+    }
+
+    public function testNoUpscaleDoesNoChangeSmallGIF()
+    {
+        $binInput = file_get_contents(__DIR__ . '/data/1x1.gif');
+        $binOutput = self::converter()->convert($binInput, self::command('1000x1000noUpscale'));
+        $image = imagecreatefromstring($binOutput);
+        $this->assertEquals(1, imagesx($image));
+        $this->assertEquals(1, imagesy($image));
     }
 
     public function testConvertsGifToJpegWithResizingAndBackgroundAndCanvasAndQuality()
     {
         $bin = self::converter()->convert(
             file_get_contents(__DIR__ . '/data/1x1.gif'),
-            self::resize10x10bgFF00FFcanvas20x20quality41Command()
+            self::command('10x10bgFF00FFcanvas20x20quality41')
         );
         $this->assertEquals(ContentType::jpeg(), ContentType::byString($bin));
     }
@@ -22,20 +51,17 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     private static function converter()
     {
         $converter = new Converter;
-        return $converter->configure(ContentType::jpeg(), __DIR__ . '/../tmp/');
+        return $converter->configure(ContentType::jpeg(), self::tmpDir());
     }
 
-    private static function resize10x10Command()
-    {
-        $command = new Command();
-        $command->configure('10x10');
-        return $command;
+    private static function tmpDir() {
+        return __DIR__ . '/../tmp/';
     }
 
-    private static function resize10x10bgFF00FFcanvas20x20quality41Command()
+    private static function command($config)
     {
         $command = new Command();
-        $command->configure('10x10bgFF00FFcanvas20x20quality41');
+        $command->configure($config);
         return $command;
     }
 }

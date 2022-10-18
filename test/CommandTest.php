@@ -98,11 +98,38 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($command->canvasHeight());
     }
 
-    public function testBackgroundAndCanvasIncludedIntoStrval()
+    public function testFullTrimMod()
+    {
+        $command = self::command('trimAABBCCx2');
+        $this->assertEquals('AABBCC', $command->trimColor());
+        $this->assertEquals('2', $command->trimFuzz());
+    }
+
+    public function testOnlyTrimColor()
+    {
+        $command = self::command('trimAABBCCx');
+        $this->assertEquals('AABBCC', $command->trimColor());
+        $this->assertEquals('', $command->trimFuzz());
+    }
+
+    public function testOnlyTrimFuzz()
+    {
+        $command = self::command('trimx10');
+        $this->assertEquals('', $command->trimColor());
+        $this->assertEquals('10', $command->trimFuzz());
+    }
+
+    public function testSimpleTrim()
+    {
+        $command = self::command('trimx');
+        $this->assertEquals('trimx', strval($command));
+    }
+
+    public function testCanConstructSameUrlUrlWithAllParams()
     {
         $this->assertEquals(
-            '200x100bgFF00FFcanvas300x200quality88colorspaceGray',
-            strval(self::command('200x100bgFF00FFcanvas300x200quality88colorspaceGray'))
+            '200x100bgFF00FFcanvas300x200quality88colorspaceGraytrimAABBCCx1',
+            strval(self::command('200x100bgFF00FFcanvas300x200quality88colorspaceGraytrimAABBCCx1'))
         );
     }
 

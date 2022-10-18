@@ -31,8 +31,11 @@ class ShellCommand {
     public function __toString()
     {
         $string = '-auto-orient';
+        if (!is_null($this->command->colorspace())) {
+            $string .= ' -colorspace ' . $this->command->colorspace();
+        }
         if ($this->command->width() || $this->command->height()) {
-            $string .= ' -resize ' . $this->command->width() . 'x' . $this->command->height();
+            $string .= ' -resize "' . $this->command->width() . 'x' . $this->command->height() . ($this->command->noUpscale() ? '>' : '') . '"';
         }
         if (!is_null($this->command->background())) {
             $string .= ' -background "#' . $this->command->background() . '" -flatten';
@@ -40,20 +43,25 @@ class ShellCommand {
         if ($this->command->canvasWidth() || $this->command->canvasHeight()) {
             $string .=
                 ' -size ' . $this->command->canvasWidth() . 'x' . $this->command->canvasHeight() .
-                ' xc:#' . $this->canvasColor() . ' +swap -gravity center -composite';
+                ' xc:' . $this->canvasColor() . ' +swap -gravity center -compose src-over -composite';
         }
         if (!is_null($this->command->quality())) {
             $string .= ' -quality ' . $this->command->quality();
         }
-        if (!is_null($this->command->colorspace())) {
-            $string .= ' -colorspace ' . $this->command->colorspace();
+        if (!is_null($this->command->trimColor()) || !is_null($this->command->trimFuzz())) {
+            $string .=
+                ($this->command->trimColor() ? " -bordercolor \"#{$this->command->trimColor()}\" -border 1x1" : "") .
+                ($this->command->trimFuzz() ? " -fuzz {$this->command->trimFuzz()}%" : "") .
+                " -trim +repage";
+        }
+        if ($this->command->stripColorProfiles()) {
+            $string .= ' -strip';
         }
         return $string;
     }
 
-
     private function canvasColor()
     {
-        return is_null($this->command->background()) ? '000000' : $this->command->background();
+        return is_null($this->command->background()) ? 'none' : '#' . $this->command->background();
     }
 }
