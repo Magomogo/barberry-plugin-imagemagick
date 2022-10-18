@@ -3,6 +3,7 @@
 namespace Barberry\Plugin\Imagemagick\Barberry\Plugin\Imagemagick\Shell;
 
 use Barberry\Plugin\Imagemagick\Command;
+use Barberry\Plugin\Imagemagick\Shell\AnimatedGif;
 use Barberry\Plugin\Imagemagick\Shell\AnimatedGif\Meta;
 
 class AnimatedGifTest extends \PHPUnit_Framework_TestCase
@@ -21,7 +22,8 @@ class AnimatedGifTest extends \PHPUnit_Framework_TestCase
             ['8-bit', '8-bit'],
             ['sRGB', 'sRGB'],
         ]));
-        return strval($shellCommand);
+
+        return (string) $shellCommand;
     }
 
     /**
@@ -44,15 +46,16 @@ class AnimatedGifTest extends \PHPUnit_Framework_TestCase
             [
                 '150x100', '-coalesce -resize "150x100"'
             ],
-            /*[
-                'colorspaceGray', '-coalesce -colorspace Gray'
-            ],*/
             [
                 'bgFFF', '-coalesce -background "#FFF" -layers optimize'
             ],
             [
                 'canvas100x150', '-coalesce -repage 100x150'
             ],
+            [
+                '150x150bgFFFcanvas100x150',
+                '-coalesce -resize "150x150" -background "#FFF" -layers optimize -repage 100x150'
+            ]
         ];
     }
 }
