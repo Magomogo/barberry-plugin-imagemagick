@@ -77,7 +77,7 @@ class Command implements InterfaceCommand
         if (empty($mh)) {
             $mh = self::MAX_HEIGHT;
         }
-        return min($this->height, self::MAX_HEIGHT);
+        return min($this->height, $mh);
     }
 
     public function noUpscale()
