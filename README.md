@@ -54,3 +54,15 @@ In other words it removes the 'boring' bits surrounding an image.
 ### strip
 
 In some cases color profiles can take up significant part of your image, especially if image is small or resized. This option allows to cut color profiles out.
+
+
+### Environment
+
+There are two environment options, which regulate image's max size:
+
+- `MAX_WIDTH` 
+  - default value is 800
+- `MAX_HEIGHT`
+  - default value is 600
+
+If you need to be able to generate a full hd/2k/4k size, please set up them
