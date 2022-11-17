@@ -5,6 +5,7 @@ namespace Barberry\Plugin\Imagemagick\Shell;
 use Barberry\Plugin\Imagemagick\Command;
 use Barberry\Plugin\Imagemagick\Shell\AnimatedGif\Meta;
 use Barberry\Plugin\Imagemagick\ShellCommand;
+use Barberry\Plugin\InterfaceCommand;
 
 class AnimatedGif extends ShellCommand
 {
@@ -13,10 +14,10 @@ class AnimatedGif extends ShellCommand
     private $meta;
 
     /**
+     * @param Meta $meta
      * @param Command $command
-     * @param Meta $meta;
      */
-    public function __construct(Command $command, Meta $meta)
+    public function __construct(Meta $meta, Command $command)
     {
         parent::__construct($command);
         $this->meta = $meta;
@@ -56,4 +57,36 @@ class AnimatedGif extends ShellCommand
         return trim($cmd);
     }
 
+    /**
+     * @param string $source
+     * @return bool
+     * @throws \ImagickException
+     */
+    public static function isAnimated($source)
+    {
+        $imagick = new \Imagick($source);
+
+        $i = 1;
+        $imagick->setFirstIterator();
+        while ($imagick->nextImage()) {
+            $i++;
+        }
+
+        return $i > 1;
+    }
+
+    /**
+     * @param InterfaceCommand $command
+     * @param $source
+     * @return AnimatedGif
+     */
+    public static function init($source, InterfaceCommand $command)
+    {
+        exec('identify ' . escapeshellarg($source), $output);
+
+        $matches = [];
+        preg_match_all('@\[(\d+)\]\sGIF\s(\d+x\d+)\s(.*?)\s(.*?)\s(.*?)\s@s', implode(PHP_EOL, $output), $matches);
+        return new AnimatedGif(new Meta($matches), $command);
+
+    }
 }

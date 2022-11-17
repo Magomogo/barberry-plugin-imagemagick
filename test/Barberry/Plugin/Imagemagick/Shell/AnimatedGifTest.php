@@ -1,10 +1,8 @@
 <?php
 
-namespace Barberry\Plugin\Imagemagick\Barberry\Plugin\Imagemagick\Shell;
+namespace Barberry\Plugin\Imagemagick\Shell;
 
 use Barberry\Plugin\Imagemagick\Command;
-use Barberry\Plugin\Imagemagick\Shell\AnimatedGif;
-use Barberry\Plugin\Imagemagick\Shell\AnimatedGif\Meta;
 
 class AnimatedGifTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,14 +12,7 @@ class AnimatedGifTest extends \PHPUnit_Framework_TestCase
         $command = new Command();
         $command->configure($string);
 
-        $shellCommand = new AnimatedGif($command, new Meta([
-            [],
-            [0, 1],
-            ['100x100', '100x100'],
-            ['100x100+0+0', '100x100+0+0'],
-            ['8-bit', '8-bit'],
-            ['sRGB', 'sRGB'],
-        ]));
+        $shellCommand = AnimatedGif::init(__DIR__ . '/../../../../data/animated.gif', $command);
 
         return (string) $shellCommand;
     }
@@ -56,6 +47,28 @@ class AnimatedGifTest extends \PHPUnit_Framework_TestCase
                 '150x150bgFFFcanvas100x150',
                 '-coalesce -resize "150x150" -background "#FFF" -layers optimize -repage 100x150'
             ]
+        ];
+    }
+
+    /**
+     * @param $fileName
+     * @param $animated
+     * @return void
+     * @throws \ImagickException
+     * @dataProvider dpTestIsGifAnimated
+     */
+    public function testIsGifAnimated($fileName, $animated)
+    {
+        self::assertEquals($animated, AnimatedGif::isAnimated($fileName));
+    }
+
+    public function dpTestIsGifAnimated()
+    {
+        return [
+            [__DIR__ . '/../../../../data/animated.gif', true],
+            [__DIR__ . '/../../../../data/1x1.gif', false],
+            [__DIR__ . '/../../../../data/static.gif', false],
+            [__DIR__ . '/../../../../data/colorProfile.jpeg', false],
         ];
     }
 }

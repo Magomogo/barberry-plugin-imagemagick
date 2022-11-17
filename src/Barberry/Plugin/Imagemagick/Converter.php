@@ -3,7 +3,6 @@ namespace Barberry\Plugin\Imagemagick;
 use Barberry\Plugin;
 use Barberry\ContentType;
 use Barberry\Plugin\Imagemagick\Shell\AnimatedGif;
-use Barberry\Plugin\Imagemagick\Shell\AnimatedGif\Meta;
 
 class Converter implements Plugin\InterfaceConverter
 {
@@ -26,13 +25,11 @@ class Converter implements Plugin\InterfaceConverter
 
     public function convert($bin, Plugin\InterfaceCommand $command = null)
     {
-        $shellCommand = new ShellCommand($command);
-
-        $matches = [];
-        preg_match_all('@\[(\d+)\]\sGIF\s(\d+x\d+)\s(.*?)\s(.*?)\s(.*?)\s@s', $bin, $matches);
-        if (isset($matches[1], $matches[2]) && !empty($matches[1]) && count($matches[1]) > 1) {
-            $shellCommand = new AnimatedGif($command, new Meta($matches));
+        if (!isset($command)) {
+            $command = new Command();
         }
+
+        $shellCommand = new ShellCommand($command);
 
         $source = tempnam($this->tempPath, "imagemagick_");
         chmod($source, 0664);
@@ -40,10 +37,9 @@ class Converter implements Plugin\InterfaceConverter
         $destination = $source . '.' . $this->targetContentType->standardExtension();
         file_put_contents($source, $bin);
 
-        $imagick = new \Imagick($source);
-        $identity = $imagick->identifyImage(true);
-
-        print_r([$identity]);
+        if (AnimatedGif::isAnimated($source)) {
+            $shellCommand = AnimatedGif::init($source, $command);
+        }
 
         exec($shellCommand->makeCommand($source, $destination));
 
