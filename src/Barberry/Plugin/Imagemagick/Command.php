@@ -64,12 +64,20 @@ class Command implements InterfaceCommand
 
     public function width()
     {
-        return min($this->width, self::MAX_WIDTH);
+        $mw = (int) getenv('MAX_WIDTH');
+        if (empty($mw)) {
+            $mw = self::MAX_WIDTH;
+        }
+        return min($this->width, $mw);
     }
 
     public function height()
     {
-        return min($this->height, self::MAX_HEIGHT);
+        $mh = (int) getenv('MAX_HEIGHT');
+        if (empty($mh)) {
+            $mh = self::MAX_HEIGHT;
+        }
+        return min($this->height, $mh);
     }
 
     public function noUpscale()
