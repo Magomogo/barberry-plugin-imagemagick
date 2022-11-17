@@ -40,6 +40,12 @@ class ShellCommand {
         if (!is_null($this->command->background())) {
             $string .= ' -background "#' . $this->command->background() . '" -flatten';
         }
+        if (!is_null($this->command->trimColor()) || !is_null($this->command->trimFuzz())) {
+            $string .=
+                ($this->command->trimColor() ? " -bordercolor \"#{$this->command->trimColor()}\" -border 1x1" : "") .
+                ($this->command->trimFuzz() ? " -fuzz {$this->command->trimFuzz()}%" : "") .
+                " -trim +repage";
+        }
         if ($this->command->canvasWidth() || $this->command->canvasHeight()) {
             $string .=
                 ' -size ' . $this->command->canvasWidth() . 'x' . $this->command->canvasHeight() .
@@ -47,12 +53,6 @@ class ShellCommand {
         }
         if (!is_null($this->command->quality())) {
             $string .= ' -quality ' . $this->command->quality();
-        }
-        if (!is_null($this->command->trimColor()) || !is_null($this->command->trimFuzz())) {
-            $string .=
-                ($this->command->trimColor() ? " -bordercolor \"#{$this->command->trimColor()}\" -border 1x1" : "") .
-                ($this->command->trimFuzz() ? " -fuzz {$this->command->trimFuzz()}%" : "") .
-                " -trim +repage";
         }
         if ($this->command->stripColorProfiles()) {
             $string .= ' -strip';
