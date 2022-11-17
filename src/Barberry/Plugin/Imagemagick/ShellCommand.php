@@ -15,7 +15,7 @@ class ShellCommand {
     /**
      * @var Command
      */
-    private $command;
+    protected $command;
 
     /**
      * @param Command $command
@@ -64,4 +64,15 @@ class ShellCommand {
     {
         return is_null($this->command->background()) ? 'none' : '#' . $this->command->background();
     }
+
+    /**
+     * @param string $source
+     * @param string $destination
+     * @return string
+     */
+    public function makeCommand($source, $destination)
+    {
+        return 'convert ' . $source . ' '  . $this . ' ' . $destination;
+    }
+
 }
