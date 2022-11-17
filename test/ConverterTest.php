@@ -64,4 +64,18 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $command->configure($config);
         return $command;
     }
+
+    public function testIdentifyAnimatedGif()
+    {
+        $c = new Converter();
+        $c->configure(ContentType::gif(), self::tmpDir());
+
+        $out = $c->convert(
+            file_get_contents(__DIR__ . '/data/animated.gif'),
+            self::command('')
+        );
+
+        file_put_contents($tf = self::tmpDir() . '/out.gif', $out);
+
+    }
 }

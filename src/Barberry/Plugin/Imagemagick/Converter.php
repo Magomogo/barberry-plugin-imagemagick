@@ -40,6 +40,11 @@ class Converter implements Plugin\InterfaceConverter
         $destination = $source . '.' . $this->targetContentType->standardExtension();
         file_put_contents($source, $bin);
 
+        $imagick = new \Imagick($source);
+        $identity = $imagick->identifyImage(true);
+
+        print_r([$identity]);
+
         exec($shellCommand->makeCommand($source, $destination));
 
         if (is_file($destination)) {
