@@ -98,6 +98,13 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($command->canvasHeight());
     }
 
+    public function testOnlyTrimColor()
+    {
+        $command = self::command('trimAABBCCx');
+        $this->assertEquals('AABBCC', $command->trimColor());
+        $this->assertEquals('', $command->trimFuzz());
+    }
+
     /**
      * @param string $strCommand
      * @param string $color
