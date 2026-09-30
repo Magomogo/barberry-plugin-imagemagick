@@ -10,7 +10,7 @@
 namespace Barberry\Plugin\Imagemagick;
 
 
-class ShellCommandTest extends \PHPUnit_Framework_TestCase
+class ShellCommandTest extends \PHPUnit\Framework\TestCase
 {
     public function testEmptyCommand()
     {

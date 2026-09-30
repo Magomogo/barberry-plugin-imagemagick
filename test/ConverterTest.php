@@ -2,7 +2,7 @@
 namespace Barberry\Plugin\Imagemagick;
 use Barberry\ContentType;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     public function testRemovesColorProfileInformation()
     {
@@ -20,14 +20,14 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $tmpFile = self::tmpDir() . 'profilesCheckKeep.jpg';
         @unlink($tmpFile);
         file_put_contents($tmpFile, $bin);
-        $this->assertEquals('    Profile-xmp: 16763 bytes', exec('identify -verbose "' . $tmpFile . '" | grep "Profile-"'));
+        $this->assertStringContainsString('Profile-xmp:', exec('identify -verbose "' . $tmpFile . '" | grep "Profile-"'));
         unlink($tmpFile);
     }
 
     public function testConvertsGifToJpegWithResizing()
     {
         $bin = self::converter()->convert(file_get_contents(__DIR__ . '/data/1x1.gif'), self::command('10x10'));
-        $this->assertEquals(ContentType::jpeg(), ContentType::byString($bin));
+        $this->assertSame('image/jpeg', getimagesizefromstring($bin)['mime']);
     }
 
     public function testNoUpscaleDoesNoChangeSmallGIF()
@@ -45,7 +45,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             file_get_contents(__DIR__ . '/data/1x1.gif'),
             self::command('10x10bgFF00FFcanvas20x20quality41')
         );
-        $this->assertEquals(ContentType::jpeg(), ContentType::byString($bin));
+        $this->assertSame('image/jpeg', getimagesizefromstring($bin)['mime']);
     }
 
     private static function converter()

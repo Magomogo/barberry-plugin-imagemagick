@@ -1,12 +1,12 @@
 <?php
 namespace Barberry\Plugin\Imagemagick;
 
-class MonitoringTest extends \PHPUnit_Framework_TestCase
+class MonitoringTest extends \PHPUnit\Framework\TestCase
 {
     private $testDirWritable;
     private $testDirNotWritable;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->testDirNotWritable = '/tmp/testdir-notwritable/';
         $this->testDirWritable = '/tmp/testdir-writable/';
@@ -14,7 +14,7 @@ class MonitoringTest extends \PHPUnit_Framework_TestCase
         @mkdir($this->testDirWritable, 0777, true);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         exec("rm -rf " . $this->testDirNotWritable);
         exec("rm -rf " . $this->testDirWritable);
