@@ -1,9 +1,19 @@
 <?php
 namespace Barberry\Plugin\Imagemagick;
 use Barberry\ContentType;
+use Barberry\Exception\ConversionNotPossible;
 
 class ConverterTest extends \PHPUnit\Framework\TestCase
 {
+    protected function tearDown(): void
+    {
+        foreach (glob(self::tmpDir() . 'imagemagick_*') as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
+    }
+
     /** @dataProvider jpegImages */
     public function testRemovesColorProfileInformation($filename)
     {
@@ -66,6 +76,20 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(100, $image[1]);
         $this->assertNotSame($input, $output);
         $this->assertEmpty(glob(self::tmpDir() . 'imagemagick_*'));
+    }
+
+    public function testStreamConversionReportsImageMagickError()
+    {
+        $this->expectException(ConversionNotPossible::class);
+        $this->expectExceptionMessageMatches('/ImageMagick exited with code [1-9][0-9]*: .+/s');
+        self::converter(self::tmpDir() . 'does-not-exist/')->convert('not an image', self::command(''));
+    }
+
+    public function testFileConversionReportsImageMagickError()
+    {
+        $this->expectException(ConversionNotPossible::class);
+        $this->expectExceptionMessageMatches('/ImageMagick exited with code [1-9][0-9]*: .+/s');
+        self::converter()->convert(str_repeat('x', Converter::MAX_IN_MEMORY_SIZE + 1), self::command(''));
     }
 
     public static function gifImages()

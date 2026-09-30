@@ -2,6 +2,7 @@
 namespace Barberry\Plugin\Imagemagick;
 use Barberry\Plugin;
 use Barberry\ContentType;
+use Barberry\Exception\ConversionNotPossible;
 
 class Converter implements Plugin\InterfaceConverter
 {
@@ -35,7 +36,16 @@ class Converter implements Plugin\InterfaceConverter
         chmod($source, 0664);
         $destination = $source . '.' . $this->targetContentType->standardExtension();
         file_put_contents($source, $bin);
-        exec('convert ' . $source . ' '  . strval($shellCommand) . ' ' . $destination);
+        $error = array();
+        $exitCode = 0;
+        exec('convert ' . escapeshellarg($source) . ' ' . strval($shellCommand) . ' ' . escapeshellarg($destination) . ' 2>&1', $error, $exitCode);
+        if ($exitCode !== 0) {
+            $reason = 'ImageMagick exited with code ' . $exitCode;
+            if (!empty($error)) {
+                $reason .= ': ' . implode("\n", $error);
+            }
+            throw new ConversionNotPossible($reason);
+        }
         if (is_file($destination)) {
             $bin = file_get_contents($destination);
             unlink($destination);
@@ -47,13 +57,13 @@ class Converter implements Plugin\InterfaceConverter
 
     private function convertInMemory($bin, ShellCommand $shellCommand)
     {
-        $process = proc_open(
+        $process = @proc_open(
             'convert - ' . strval($shellCommand) . ' ' . $this->targetContentType->standardExtension() . ':-',
             array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w')),
             $pipes
         );
         if (!is_resource($process)) {
-            return $bin;
+            throw new ConversionNotPossible('could not start ImageMagick');
         }
 
         foreach ($pipes as $pipe) {
@@ -62,7 +72,8 @@ class Converter implements Plugin\InterfaceConverter
 
         $offset = 0;
         $output = '';
-        $failed = false;
+        $error = '';
+        $failure = null;
         while (!empty($pipes)) {
             if (isset($pipes[0]) && $offset === strlen($bin)) {
                 fclose($pipes[0]);
@@ -81,8 +92,8 @@ class Converter implements Plugin\InterfaceConverter
                 break;
             }
             $except = null;
-            if (stream_select($read, $write, $except, null) === false) {
-                $failed = true;
+            if (@stream_select($read, $write, $except, null) === false) {
+                $failure = 'could not wait for ImageMagick pipes';
                 proc_terminate($process);
                 break;
             }
@@ -90,7 +101,7 @@ class Converter implements Plugin\InterfaceConverter
             foreach ($read as $pipe) {
                 $data = @fread($pipe, 8192);
                 if ($data === false) {
-                    $failed = true;
+                    $failure = 'could not read ImageMagick output';
                     $index = isset($pipes[1]) && $pipe === $pipes[1] ? 1 : 2;
                     fclose($pipe);
                     unset($pipes[$index]);
@@ -98,6 +109,8 @@ class Converter implements Plugin\InterfaceConverter
                 }
                 if (isset($pipes[1]) && $pipe === $pipes[1]) {
                     $output .= $data;
+                } else {
+                    $error .= $data;
                 }
                 if ($data === '' && feof($pipe)) {
                     $index = isset($pipes[1]) && $pipe === $pipes[1] ? 1 : 2;
@@ -108,7 +121,7 @@ class Converter implements Plugin\InterfaceConverter
             if (!empty($write)) {
                 $written = @fwrite($pipes[0], substr($bin, $offset, 8192));
                 if ($written === false || $written === 0) {
-                    $failed = true;
+                    $failure = 'could not write image to ImageMagick';
                     fclose($pipes[0]);
                     unset($pipes[0]);
                 } else {
@@ -121,6 +134,17 @@ class Converter implements Plugin\InterfaceConverter
             fclose($pipe);
         }
         $exitCode = proc_close($process);
-        return !$failed && $exitCode === 0 ? $output : $bin;
+        if ($failure !== null || $exitCode !== 0) {
+            $reason = 'ImageMagick exited with code ' . $exitCode;
+            if ($failure !== null) {
+                $reason .= ' (' . $failure . ')';
+            }
+            if (trim($error) !== '') {
+                $reason .= ': ' . trim($error);
+            }
+            throw new ConversionNotPossible($reason);
+        }
+
+        return $output;
     }
 }
