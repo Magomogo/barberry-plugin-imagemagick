@@ -4,12 +4,12 @@ use Barberry\Direction;
 use Barberry\Direction\Composer;
 use Barberry\Monitor;
 
-class InstallerTest extends \PHPUnit_Framework_TestCase
+class InstallerTest extends \PHPUnit\Framework\TestCase
 {
     private $directionDir;
     private $monitorDir;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->directionDir = realpath(__DIR__ . '/../tmp' ) . '/test-directions/';
         $this->monitorDir = realpath(__DIR__ . '/../tmp') . '/test-monitors/';
@@ -17,7 +17,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         @mkdir($this->monitorDir, 0777, true);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         exec("rm -rf " . $this->directionDir);
         exec("rm -rf " . $this->monitorDir);
