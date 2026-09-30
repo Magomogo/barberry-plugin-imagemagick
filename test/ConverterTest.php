@@ -4,9 +4,10 @@ use Barberry\ContentType;
 
 class ConverterTest extends \PHPUnit\Framework\TestCase
 {
-    public function testRemovesColorProfileInformation()
+    /** @dataProvider jpegImages */
+    public function testRemovesColorProfileInformation($filename)
     {
-        $bin = self::converter()->convert(file_get_contents(__DIR__ . '/data/colorProfile.jpeg'), self::command('strip'));
+        $bin = self::converter()->convert(self::input($filename), self::command('strip'));
         $tmpFile = self::tmpDir() . 'profilesCheckRemove.jpg';
         @unlink($tmpFile);
         file_put_contents($tmpFile, $bin);
@@ -14,9 +15,10 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         unlink($tmpFile);
     }
 
-    public function testKeepsColorProfileInformation()
+    /** @dataProvider jpegImages */
+    public function testKeepsColorProfileInformation($filename)
     {
-        $bin = self::converter()->convert(file_get_contents(__DIR__ . '/data/colorProfile.jpeg'), self::command(''));
+        $bin = self::converter()->convert(self::input($filename), self::command(''));
         $tmpFile = self::tmpDir() . 'profilesCheckKeep.jpg';
         @unlink($tmpFile);
         file_put_contents($tmpFile, $bin);
@@ -24,34 +26,73 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         unlink($tmpFile);
     }
 
-    public function testConvertsGifToJpegWithResizing()
+    /** @dataProvider gifImages */
+    public function testConvertsGifToJpegWithResizing($filename)
     {
-        $bin = self::converter()->convert(file_get_contents(__DIR__ . '/data/1x1.gif'), self::command('10x10'));
+        $bin = self::converter()->convert(self::input($filename), self::command('10x10'));
         $this->assertSame('image/jpeg', getimagesizefromstring($bin)['mime']);
     }
 
-    public function testNoUpscaleDoesNoChangeSmallGIF()
+    /** @dataProvider gifImages */
+    public function testNoUpscaleDoesNoChangeSmallGIF($filename)
     {
-        $binInput = file_get_contents(__DIR__ . '/data/1x1.gif');
+        $binInput = self::input($filename);
         $binOutput = self::converter()->convert($binInput, self::command('1000x1000noUpscale'));
         $image = imagecreatefromstring($binOutput);
         $this->assertEquals(1, imagesx($image));
         $this->assertEquals(1, imagesy($image));
     }
 
-    public function testConvertsGifToJpegWithResizingAndBackgroundAndCanvasAndQuality()
+    /** @dataProvider gifImages */
+    public function testConvertsGifToJpegWithResizingAndBackgroundAndCanvasAndQuality($filename)
     {
         $bin = self::converter()->convert(
-            file_get_contents(__DIR__ . '/data/1x1.gif'),
+            self::input($filename),
             self::command('10x10bgFF00FFcanvas20x20quality41')
         );
         $this->assertSame('image/jpeg', getimagesizefromstring($bin)['mime']);
     }
 
-    private static function converter()
+    /** @dataProvider jpegImages */
+    public function testConvertsJpegWithResizing($filename)
+    {
+        $input = self::input($filename);
+
+        $output = self::converter()->convert($input, self::command('100x100'));
+
+        $image = getimagesizefromstring($output);
+        $this->assertSame('image/jpeg', $image['mime']);
+        $this->assertSame(100, $image[0]);
+        $this->assertSame(100, $image[1]);
+        $this->assertNotSame($input, $output);
+        $this->assertEmpty(glob(self::tmpDir() . 'imagemagick_*'));
+    }
+
+    public static function gifImages()
+    {
+        return array(
+            'small file' => array('1x1.gif'),
+            '3 mb file' => array('3mb.gif')
+        );
+    }
+
+    public static function jpegImages()
+    {
+        return array(
+            'small file' => array('colorProfile.jpeg'),
+            '3 mb file' => array('colorProfile3mb.jpeg')
+        );
+    }
+
+    private static function input($filename)
+    {
+        return file_get_contents(__DIR__ . '/data/' . $filename);
+    }
+
+    private static function converter($tmpDir = null)
     {
         $converter = new Converter;
-        return $converter->configure(ContentType::jpeg(), self::tmpDir());
+        return $converter->configure(ContentType::jpeg(), is_null($tmpDir) ? self::tmpDir() : $tmpDir);
     }
 
     private static function tmpDir() {

@@ -5,6 +5,8 @@ barberry-plugin-imagemagick
 
 Barberry plugin for handling images
 
+Inputs up to 2 MiB are passed to ImageMagick through standard streams, so the plugin does not create temporary files for them. Larger inputs use temporary files in the configured directory. 
+
 Parameters syntax:
 -----------------
 
